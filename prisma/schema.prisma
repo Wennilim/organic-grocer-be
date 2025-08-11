@@ -1,0 +1,28 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model fruits {
+  id         Int       @id @default(autoincrement())
+  name       String    
+  quantity   Int
+  price      Decimal   @db.Decimal(10, 2)
+  origin     String?
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  @@map("fruits")  
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  password String
+  name     String?
+  createdAt DateTime @default(now())
+  
+  @@map("users")
+}
