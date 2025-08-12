@@ -7,15 +7,18 @@ import {
   Param,
   Delete,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { FruitsService } from './fruits.service';
 import { Prisma } from '@prisma/client';
+import { AdminGuard } from 'src/common/guards/admin.guard';
 
 @Controller('fruits')
 export class FruitsController {
   constructor(private readonly fruitsService: FruitsService) {}
 
   @Post()
+  @UseGuards(AdminGuard)
   create(@Body() createFruitDto: Prisma.fruitsCreateInput) {
     return this.fruitsService.create(createFruitDto);
   }
@@ -54,6 +57,7 @@ export class FruitsController {
   }
 
   @Patch(':id')
+  @UseGuards(AdminGuard)
   update(
     @Param('id') id: string,
     @Body() updateFruitDto: Prisma.fruitsUpdateInput,
@@ -62,6 +66,7 @@ export class FruitsController {
   }
 
   @Delete(':id')
+  @UseGuards(AdminGuard)
   remove(@Param('id') id: string) {
     return this.fruitsService.remove(+id);
   }
