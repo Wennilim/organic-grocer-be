@@ -19,12 +19,16 @@ model fruits {
 }
 
 model User {
-  id           Int      @id @default(autoincrement())
-  email        String   @unique
-  password     String
-  name         String
-  role         String   @default("user")
-  refreshToken String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id              Int       @id @default(autoincrement())
+  email           String    @unique
+  password        String
+  name            String
+  role            String    @default("user")
+  refreshToken    String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  birthday        DateTime?
+  gender          String?
+  phoneNumber     String?
+  shippingAddress String?
 }
