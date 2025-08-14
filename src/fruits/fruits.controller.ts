@@ -19,7 +19,7 @@ export class FruitsController {
 
   @Post()
   @UseGuards(AdminGuard)
-  create(@Body() createFruitDto: Prisma.fruitsCreateInput) {
+  create(@Body() createFruitDto: Prisma.FruitCreateInput) {
     return this.fruitsService.create(createFruitDto);
   }
 
@@ -60,7 +60,7 @@ export class FruitsController {
   @UseGuards(AdminGuard)
   update(
     @Param('id') id: string,
-    @Body() updateFruitDto: Prisma.fruitsUpdateInput,
+    @Body() updateFruitDto: Prisma.FruitUpdateInput,
   ) {
     return this.fruitsService.update(+id, updateFruitDto);
   }

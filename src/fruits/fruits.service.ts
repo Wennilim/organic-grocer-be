@@ -6,9 +6,9 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class FruitsService {
   constructor(private prisma: PrismaService) {}
 
-  async create(data: Prisma.fruitsCreateInput) {
+  async create(data: Prisma.FruitCreateInput) {
     try {
-      return await this.prisma.fruits.create({ data });
+      return await this.prisma.fruit.create({ data });
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
@@ -20,11 +20,11 @@ export class FruitsService {
   }
 
   findAll() {
-    return this.prisma.fruits.findMany();
+    return this.prisma.fruit.findMany();
   }
 
   async searchByName(name: string) {
-    return this.prisma.fruits.findMany({
+    return this.prisma.fruit.findMany({
       where: {
         name: {
           contains: name,
@@ -35,7 +35,7 @@ export class FruitsService {
   }
 
   async searchByOrigin(origin: string) {
-    return this.prisma.fruits.findMany({
+    return this.prisma.fruit.findMany({
       where: {
         origin: {
           contains: origin,
@@ -48,12 +48,12 @@ export class FruitsService {
   async paginate(page: number = 1, pageSize: number = 10) {
     const skip = (page - 1) * pageSize;
     const [data, total] = await this.prisma.$transaction([
-      this.prisma.fruits.findMany({
+      this.prisma.fruit.findMany({
         skip,
         take: pageSize,
         orderBy: { id: 'asc' },
       }),
-      this.prisma.fruits.count(),
+      this.prisma.fruit.count(),
     ]);
 
     return {
@@ -66,7 +66,7 @@ export class FruitsService {
   }
 
   sortByPrice(@Query('order') order: 'asc' | 'desc' = 'asc') {
-    return this.prisma.fruits.findMany({
+    return this.prisma.fruit.findMany({
       orderBy: {
         price: order,
       },
@@ -78,16 +78,16 @@ export class FruitsService {
       throw new Error('Invalid ID');
     }
 
-    return this.prisma.fruits.findUnique({
+    return this.prisma.fruit.findUnique({
       where: { id },
     });
   }
 
-  update(id: number, data: Prisma.fruitsUpdateInput) {
-    return this.prisma.fruits.update({ where: { id }, data });
+  update(id: number, data: Prisma.FruitUpdateInput) {
+    return this.prisma.fruit.update({ where: { id }, data });
   }
 
   remove(id: number) {
-    return this.prisma.fruits.delete({ where: { id } });
+    return this.prisma.fruit.delete({ where: { id } });
   }
 }

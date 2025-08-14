@@ -9,6 +9,7 @@ import { AdminAuthService } from './admin-auth/admin-auth.service';
 import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { UserModule } from './user/user.module';
+import { CartModule } from './cart/cart.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { UserModule } from './user/user.module';
     AuthModule,
     AdminAuthModule,
     UserModule,
+    CartModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, AdminAuthService],

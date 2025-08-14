@@ -5,10 +5,15 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
+import { JwtStrategy } from 'src/auth/strategies/jwt.strategy';
 
 @Module({
-  imports: [PassportModule, JwtModule.register({})],
+  imports: [
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    JwtModule.register({}),
+  ],
   controllers: [AuthController],
-  providers: [AuthService, PrismaService, JwtRefreshStrategy],
+  providers: [AuthService, PrismaService, JwtRefreshStrategy, JwtStrategy],
+  exports: [PassportModule],
 })
 export class AuthModule {}
