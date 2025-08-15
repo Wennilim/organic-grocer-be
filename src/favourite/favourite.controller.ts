@@ -4,7 +4,7 @@ import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 
 @Controller('favourite')
 export class FavouriteController {
-  constructor(private favouriteService: FavouriteService) {}
+  constructor(private readonly favouriteService: FavouriteService) {}
 
   @Post('toggle')
   @UseGuards(JwtAuthGuard)

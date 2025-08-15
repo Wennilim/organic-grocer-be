@@ -13,6 +13,8 @@ import { CartModule } from './cart/cart.module';
 import { FavouriteService } from './favourite/favourite.service';
 import { FavouriteController } from './favourite/favourite.controller';
 import { FavouriteModule } from './favourite/favourite.module';
+import { OrderService } from './order/order.service';
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [
@@ -24,8 +26,15 @@ import { FavouriteModule } from './favourite/favourite.module';
     UserModule,
     CartModule,
     FavouriteModule,
+    OrderModule,
   ],
   controllers: [AppController, FavouriteController],
-  providers: [AppService, PrismaService, AdminAuthService, FavouriteService],
+  providers: [
+    AppService,
+    PrismaService,
+    AdminAuthService,
+    FavouriteService,
+    OrderService,
+  ],
 })
 export class AppModule {}

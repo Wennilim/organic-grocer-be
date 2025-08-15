@@ -3,7 +3,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class FavouriteService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) {}
 
   async toggleFavourite(userId: number, fruitId: number) {
     const fruit = await this.prisma.fruit.findUnique({ where: { id: userId } });
