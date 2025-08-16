@@ -15,6 +15,7 @@ import { FavouriteController } from './favourite/favourite.controller';
 import { FavouriteModule } from './favourite/favourite.module';
 import { OrderService } from './order/order.service';
 import { OrderModule } from './order/order.module';
+import { SupabaseService } from './supabase/supabase.service';
 
 @Module({
   imports: [
@@ -35,6 +36,8 @@ import { OrderModule } from './order/order.module';
     AdminAuthService,
     FavouriteService,
     OrderService,
+    SupabaseService,
   ],
+  exports: [SupabaseService],
 })
 export class AppModule {}

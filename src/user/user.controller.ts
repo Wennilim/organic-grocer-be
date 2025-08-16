@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import {
   Body,
   Controller,
@@ -6,14 +8,23 @@ import {
   Patch,
   Query,
   UseGuards,
+  UploadedFile,
+  UseInterceptors,
+  Post,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { AdminGuard } from 'src/common/guards/admin.guard';
 import { UserService } from 'src/user/user.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { SupabaseService } from 'src/supabase/supabase.service';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 
 @Controller('user')
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private readonly supabaseService: SupabaseService,
+  ) {}
 
   @Get()
   @UseGuards(AdminGuard)
@@ -44,5 +55,17 @@ export class UserController {
     @Body() updateUserDto: Prisma.UserUpdateInput,
   ) {
     return this.userService.update(+id, updateUserDto);
+  }
+
+  @Post('upload-avatar')
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadUserAvatar(@UploadedFile() file: Express.Multer.File) {
+    return this.supabaseService.uploadFile(
+      'users',
+      file.originalname,
+      file.buffer,
+      file.mimetype,
+    );
   }
 }

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import {
   Controller,
   Get,
@@ -8,19 +10,38 @@ import {
   Delete,
   Query,
   UseGuards,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { FruitsService } from './fruits.service';
 import { Prisma } from '@prisma/client';
 import { AdminGuard } from 'src/common/guards/admin.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { SupabaseService } from 'src/supabase/supabase.service';
 
 @Controller('fruits')
 export class FruitsController {
-  constructor(private readonly fruitsService: FruitsService) {}
+  constructor(
+    private readonly fruitsService: FruitsService,
+    private readonly supabaseService: SupabaseService,
+  ) {}
 
   @Post()
   @UseGuards(AdminGuard)
   create(@Body() createFruitDto: Prisma.FruitCreateInput) {
     return this.fruitsService.create(createFruitDto);
+  }
+
+  @Post('upload')
+  @UseGuards(AdminGuard)
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadFruitImage(@UploadedFile() file: Express.Multer.File) {
+    return this.supabaseService.uploadFile(
+      'fruits',
+      file.originalname,
+      file.buffer,
+      file.mimetype,
+    );
   }
 
   @Get()
