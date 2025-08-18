@@ -46,7 +46,11 @@ export class FruitsController {
 
   @Post('upload/:id')
   @UseGuards(AdminGuard)
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(
+    FileInterceptor('file', {
+      limits: { fileSize: 10 * 1024 * 1024 },
+    }),
+  )
   async uploadFruitImage(
     @Param('id') id: string,
     @UploadedFile() file: Express.Multer.File,
