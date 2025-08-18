@@ -26,7 +26,7 @@ export class SupabaseService {
     filePath: string,
     file: Buffer,
     contentType: string,
-  ): Promise<{ url: string }> {
+  ): Promise<string> {
     const { error } = await this.supabase.storage
       .from(bucket)
       .upload(filePath, file, {
@@ -41,6 +41,6 @@ export class SupabaseService {
 
     const { data } = this.supabase.storage.from(bucket).getPublicUrl(filePath);
 
-    return { url: data.publicUrl };
+    return data.publicUrl;
   }
 }

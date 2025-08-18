@@ -32,16 +32,34 @@ export class FruitsController {
     return this.fruitsService.create(createFruitDto);
   }
 
-  @Post('upload')
+  // @Post('upload')
+  // @UseGuards(AdminGuard)
+  // @UseInterceptors(FileInterceptor('file'))
+  // async uploadFruitImage(@UploadedFile() file: Express.Multer.File) {
+  //   return this.supabaseService.uploadFile(
+  //     'fruits',
+  //     file.originalname,
+  //     file.buffer,
+  //     file.mimetype,
+  //   );
+  // }
+
+  @Post('upload/:id')
   @UseGuards(AdminGuard)
   @UseInterceptors(FileInterceptor('file'))
-  async uploadFruitImage(@UploadedFile() file: Express.Multer.File) {
-    return this.supabaseService.uploadFile(
+  async uploadFruitImage(
+    @Param('id') id: string,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    const imageUrl = await this.supabaseService.uploadFile(
       'fruits',
       file.originalname,
       file.buffer,
       file.mimetype,
     );
+
+    // 更新该 fruit 的 imageUrl
+    return this.fruitsService.update(+id, { imageUrl });
   }
 
   @Get()
