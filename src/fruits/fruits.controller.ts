@@ -26,11 +26,35 @@ export class FruitsController {
     private readonly supabaseService: SupabaseService,
   ) {}
 
-  @Post()
+  @Post('addFruit')
   @UseGuards(AdminGuard)
-  create(@Body() createFruitDto: Prisma.FruitCreateInput) {
-    return this.fruitsService.create(createFruitDto);
+  @UseInterceptors(FileInterceptor('file'))
+  async createWithImage(
+    @UploadedFile() file: Express.Multer.File,
+    @Body()
+    body: { name: string; price: number; quantity: number; origin: string },
+  ) {
+    const imageUrl = await this.supabaseService.uploadFile(
+      'fruits',
+      file.originalname,
+      file.buffer,
+      file.mimetype,
+    );
+
+    return this.fruitsService.create({
+      name: body.name,
+      price: Number(body.price),
+      quantity: Number(body.quantity),
+      origin: body.origin,
+      imageUrl,
+    });
   }
+
+  // @Post()
+  // @UseGuards(AdminGuard)
+  // create(@Body() createFruitDto: Prisma.FruitCreateInput) {
+  //   return this.fruitsService.create(createFruitDto);
+  // }
 
   // @Post('upload')
   // @UseGuards(AdminGuard)
