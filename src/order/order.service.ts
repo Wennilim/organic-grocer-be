@@ -5,6 +5,8 @@ import {
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { customAlphabet } from 'nanoid';
+const nanoid = customAlphabet('1234567890abcdef', 10);
 
 @Injectable()
 export class OrderService {
@@ -23,6 +25,7 @@ export class OrderService {
     const order = await this.prisma.order.create({
       data: {
         userId,
+        trackingNumber: `OG-${nanoid()}`,
         items: {
           create: cart.items.map((item) => ({
             fruitId: item.fruitId,
